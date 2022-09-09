@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'adminpage.dart';
 import 'firstpage.dart';
+import 'login/loginpage.dart';
 import 'secondpage.dart';
+import 'thirdpage.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,13 +14,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedPage = 0;
+  int _selectedPage = 4;
   List<Widget> listPage = [];
 
   @override
   void initState() {
     listPage.add(const FirstPage());
     listPage.add(const SecondPage());
+    listPage.add(const ThirdPage());
+    listPage.add(const AdminPage());
+    listPage.add(const LoginPage());
     super.initState();
   }
 
@@ -52,10 +58,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: const Text("Item 2"),
                   ),
                   const SizedBox(width: 40.0),
-                  const Text("Item 3"),
                 ],
               ),
-              const Text("Administração"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Visibility(
+                    visible: false,
+                    child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedPage = 3;
+                      });
+                    },
+                    child: const Text("Administração"),
+                  ),
+                  ),
+                  const SizedBox(width: 40.0),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedPage = 4;
+                      });
+                    },
+                    child: const Text("Login"),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

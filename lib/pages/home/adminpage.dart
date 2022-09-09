@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class SecondPage extends StatelessWidget {
-  const SecondPage({Key? key}) : super(key: key);
+class AdminPage extends StatelessWidget {
+  const AdminPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: const [
         Text(
-          "Página 2",
+          "Página Administração",
           style: TextStyle(
             fontSize: 150.0,
           ),

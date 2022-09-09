@@ -6,8 +6,14 @@ class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: const [
-        Text("Página 1"),
+        Text(
+          "Página 1",
+          style: TextStyle(
+            fontSize: 150.0,
+          ),
+        ),
         Text("2"),
       ],
     );
