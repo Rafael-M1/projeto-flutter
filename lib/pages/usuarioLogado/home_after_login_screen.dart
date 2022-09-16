@@ -1,27 +1,23 @@
+import 'package:aplicacao/model/user/user_service.dart';
+import 'package:aplicacao/pages/CrudProdutos/produtos_screen.dart';
+import 'package:aplicacao/pages/home/home.dart';
+import 'package:aplicacao/pages/home/secondpage.dart';
 import 'package:flutter/material.dart';
 
-import 'adminpage.dart';
-import 'firstpage.dart';
-import 'login/loginpage.dart';
-import 'secondpage.dart';
-import 'thirdpage.dart';
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+class HomeAfterLoginScreen extends StatefulWidget {
+  const HomeAfterLoginScreen({Key? key}) : super(key: key);
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeAfterLoginScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeAfterLoginScreen> {
   int _selectedPage = 0;
   List<Widget> listPage = [];
 
   @override
   void initState() {
-    listPage.add(const FirstPage());
-    //listPage.add(const SecondPage());
-    listPage.add(const LoginPage());
+    listPage.add(const SecondPage());
+    listPage.add(const ProdutosScreen());
     super.initState();
   }
 
@@ -55,11 +51,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(width: 40.0),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _selectedPage = 1;
-                      });
+                      UsuarioServices usuarioServices = UsuarioServices();
+                      usuarioServices.signOut();
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
                     },
-                    child: const Text("Login"),
+                    child: const Text("Logout"),
                   ),
                 ],
               ),

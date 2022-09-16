@@ -1,3 +1,5 @@
+import 'package:aplicacao/pages/CrudFornecedores/fornecedores_screen.dart';
+import 'package:aplicacao/pages/CrudProdutos/produtos_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'pages/home/home.dart';
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
+        '/produtos' : ((context) => const ProdutosScreen()),
+        '/fornecedores' : ((context) => const FornecedoresScreen()),
       },
     );
   }
