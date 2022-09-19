@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'produto.dart';
 
@@ -11,7 +12,31 @@ class ProdutoService {
     firestoreRef = _firestore.collection('Produtos');
   }
 
-  void addProduto(Produto produto) async {
-    await _firestore.collection("Produtos").add(produto.toMap());
+  Future<bool> adicionarProduto(Produto produto) async {
+    try {
+      await _firestore.collection("Produtos").add(produto.toMap());
+      return Future.value(true);
+    } on FirebaseException catch (e) {
+      if (e.code != 'OK') {
+        debugPrint('Problemas ao gravar dados');
+      } else if (e.code == 'ABORTED') {
+        debugPrint('Inclusão de dados abortada');
+      }
+      return Future.value(false);
+    }
+  }
+
+  Future<bool> deleteProduto(String idProduto) async {
+    try {
+      await _firestore.collection("Produtos").doc(idProduto).delete();
+      return Future.value(true);
+    } on FirebaseException catch (e) {
+      if (e.code != 'OK') {
+        debugPrint('Problemas ao deletar dados');
+      } else if (e.code == 'ABORTED') {
+        debugPrint('Deleção abortada');
+      }
+      return Future.value(false);
+    }
   }
 }
