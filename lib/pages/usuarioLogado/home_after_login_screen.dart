@@ -1,7 +1,7 @@
 import 'package:aplicacao/model/user/user_service.dart';
 import 'package:aplicacao/pages/CrudProdutos/produtos_screen.dart';
 import 'package:aplicacao/pages/home/home.dart';
-import 'package:aplicacao/pages/home/secondpage.dart';
+import 'package:aplicacao/pages/usuarioLogado/cruds_page.dart';
 import 'package:flutter/material.dart';
 
 class HomeAfterLoginScreen extends StatefulWidget {

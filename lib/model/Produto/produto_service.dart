@@ -26,6 +26,29 @@ class ProdutoService {
     }
   }
 
+  Future<Produto> getProduto(String idProduto) async {
+    Produto produto =
+        _firestore.collection("Produtos").doc(idProduto) as Produto;
+    return produto;
+  }
+
+  Future<bool> updateProduto(Produto produto, String idProduto) async {
+    try {
+      await _firestore
+          .collection("Produtos")
+          .doc(idProduto)
+          .set(produto.toMap());
+      return Future.value(true);
+    } on FirebaseException catch (e) {
+      if (e.code != 'OK') {
+        debugPrint('Problemas ao atualizar dados');
+      } else if (e.code == 'ABORTED') {
+        debugPrint('Alteração abortada');
+      }
+      return Future.value(false);
+    }
+  }
+
   Future<bool> deleteProduto(String idProduto) async {
     try {
       await _firestore.collection("Produtos").doc(idProduto).delete();

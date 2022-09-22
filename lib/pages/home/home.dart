@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'adminpage.dart';
 import 'firstpage.dart';
 import 'login/loginpage.dart';
-import 'secondpage.dart';
-import 'thirdpage.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,7 +17,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     listPage.add(const FirstPage());
-    //listPage.add(const SecondPage());
     listPage.add(const LoginPage());
     super.initState();
   }
