@@ -1,0 +1,31 @@
+Caso de Uso - Candidatar a uma Oferta de Estágio
+Objetivo: Possibilita o estudante candidatar-se a uma Oferta de Estágio.
+Ator:Estudante
+Pré-Condição:O Estudante deve estar previamente cadastrado no sistema e candidatar-se a uma vaga cujo status esteja "não-preenchido".
+Fluxo:
+1.O sistema exibe uma lista de Ofertas de Estágio que correspondem ao perfil do estudante logado.
+2.O estudante seleciona uma Oferta de Estágio e se candidata a Oferta.
+
+Caso de Uso - Cadastrar Currículo
+Objetivo: Possibilita o estudante cadastrar currículo para que no sistema seja listado ofertas de estágio com base em seu currículo.
+Ator:Estudante
+Pré-Condição: 
+Fluxo:
+1.O sistema exibe um formulário para cadastro do currículo
+2.O estudante deve preencher o formulário com seus dados e apertar um botão ao fim quando finalizar o cadastro para salvar seus dados.
+
+Caso de Uso - Registrar Oferta de Estágio
+Objetivo: Possibilita o responsável da empresa cadastrar uma oferta de estágio para que no sistema seja listado ofertas de estágio.
+Ator:Empresa
+Pré-Condição:O responsável da empresa deve estar previamente cadastrado no sistema.
+Fluxo:
+1.O sistema exibe um formulário para cadastro de oferta de estágio.
+2.O responsável da empresa deve preencher o formulário com os dados da oferta e apertar um botão ao fim quando finalizar o cadastro para salvar os dados.
+
+Caso de Uso - Escolher candidato para uma Oferta de Estágio
+Objetivo: Possibilita o responsável da empresa escolher, dentre a Lista de candidatos a uma Oferta de Estágio, um estudante para prencher a Oferta.
+Ator:Empresa
+Pré-Condição:O responsável da empresa deve estar previamente cadastrado no sistema e existir a oferta de estágio.
+Fluxo:
+1.O sistema exibe a lista de candidatos a Oferta de Estágio.
+2.O responsável após analisar a lista de candidatos deve selecionar um candidato e o sistema informará ao estudante a sua aprovação para a Oferta de Estágio.
