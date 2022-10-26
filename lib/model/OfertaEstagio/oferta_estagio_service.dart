@@ -34,13 +34,13 @@ class OfertaEstagioService {
     OfertaEstagio ofertaEstagio =
         firestoreRef.doc(idOfertaEstagio) as OfertaEstagio;
     cursoService
-        .getCurso(ofertaEstagio.idCurso!)
+        .getCurso(ofertaEstagio.curso!.idCurso!)
         .then((curso) => ofertaEstagio.curso = curso);
-    estudanteService.getEstudante(ofertaEstagio.idEstudante!).then(
+    estudanteService.getEstudante(ofertaEstagio.estudante!.idEstudante!).then(
       (estudante) {
         ofertaEstagio.estudante = estudante;
         cursoService
-            .getCurso(estudante.idCurso!)
+            .getCurso(estudante.curso!.idCurso!)
             .then((curso) => estudante.curso = curso);
       },
     );

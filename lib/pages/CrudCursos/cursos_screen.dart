@@ -1,126 +1,10 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
-
+import 'package:aplicacao/model/Curso/curso.dart';
 import 'package:aplicacao/model/Curso/curso_service.dart';
-import 'package:aplicacao/model/Produto/produto.dart';
-import 'package:aplicacao/model/Produto/produto_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:aplicacao/pages/CrudCursos/cursos_screen.dart';
 
-class CrudsPage extends StatefulWidget {
-  const CrudsPage({Key? key}) : super(key: key);
-
-  @override
-  State<CrudsPage> createState() => _CrudsPageState();
-}
-
-class _CrudsPageState extends State<CrudsPage> {
-  @override
-  Widget build(BuildContext context) {
-    ProdutoService produtoService = ProdutoService();
-
-    return Container(
-      height: 500,
-      color: Colors.black12,
-      child: Column(
-        children: [
-          const SizedBox(height: 50),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  //Navigator.pushNamed(context, '/produtos');
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text("Cadastro de Estudante"),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Voltar'),
-                        ),
-                      ],
-                      content: dialogContentCRUDProduto(
-                        context,
-                        produtoService,
-                      ),
-                    ),
-                  );
-                },
-                child: const Text("CRUD Produtos"),
-              ),
-              const SizedBox(width: 50),
-              ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text("Cadastro de Cursos"),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Voltar'),
-                        ),
-                      ],
-                      content: dialogContentCRUDCurso(
-                        context,
-                      ),
-                    ),
-                  );
-                },
-                child: const Text("Cadastro de Cursos"),
-              )
-            ],
-          ),
-          const SizedBox(height: 50),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  //Navigator.pushNamed(context, '/produtos');
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text("CRUD Curso"),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Voltar'),
-                        ),
-                      ],
-                      content: dialogContentCRUDProduto(
-                        context,
-                        produtoService,
-                      ),
-                    ),
-                  );
-                },
-                child: const Text("CRUD Produtos"),
-              ),
-              const SizedBox(width: 50),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/fornecedores');
-                },
-                child: const Text("CRUD Fornecedores"),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-SingleChildScrollView dialogContentCRUDProduto(context, produtoService) {
+SingleChildScrollView dialogContentCRUDCurso(context) {
+  CursoService cursoService = CursoService();
   return SingleChildScrollView(
     child: Center(
       child: Container(
@@ -130,7 +14,7 @@ SingleChildScrollView dialogContentCRUDProduto(context, produtoService) {
               left: 15.0, right: 15.0, bottom: 15.0, top: 50.0),
           child: Column(
             children: [
-              funcaoCriarProduto(context),
+              funcaoCriarCurso(context),
               const SizedBox(
                 height: 50,
               ),
@@ -138,7 +22,7 @@ SingleChildScrollView dialogContentCRUDProduto(context, produtoService) {
                 height: MediaQuery.of(context).size.height * 0.8,
                 width: MediaQuery.of(context).size.width * 0.5,
                 child: StreamBuilder(
-                  stream: produtoService.firestoreRef.snapshots(),
+                  stream: cursoService.firestoreRef.snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     //Verifica existência de dados
                     if (snapshot.hasData) {
@@ -166,13 +50,8 @@ SingleChildScrollView dialogContentCRUDProduto(context, produtoService) {
                                     children: [
                                       Text("Nome: " +
                                           docSnapshot.get('nome') +
-                                          " - Descrição: " +
-                                          docSnapshot.get('descricao')),
-                                      const SizedBox(height: 8),
-                                      Text("Unidade: " +
-                                          docSnapshot.get('unidade') +
-                                          " - Preço: R\$ " +
-                                          docSnapshot.get('preco')),
+                                          " - Tipo: " +
+                                          docSnapshot.get('tipo')),
                                     ],
                                   ),
                                   Row(
@@ -189,14 +68,14 @@ SingleChildScrollView dialogContentCRUDProduto(context, produtoService) {
                                       IconButton(
                                         iconSize: 25,
                                         onPressed: () async {
-                                          bool isDeleted = await produtoService
-                                              .deleteProduto(docSnapshot.id);
+                                          bool isDeleted = await cursoService
+                                              .deleteCurso(docSnapshot.id);
                                           if (isDeleted) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
                                                 content: const Text(
-                                                    "Produto deletado com sucesso!"),
+                                                    "Curso deletado com sucesso!"),
                                                 action: SnackBarAction(
                                                   label: "Fechar",
                                                   onPressed: () =>
@@ -236,15 +115,15 @@ SingleChildScrollView dialogContentCRUDProduto(context, produtoService) {
   );
 }
 
-ElevatedButton funcaoCriarProduto(context) {
+ElevatedButton funcaoCriarCurso(context) {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Produto produto = Produto();
+  final Curso curso = Curso();
   return ElevatedButton(
     onPressed: () {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Cadastro de Produto'),
+          title: const Text('Cadastro de Curso'),
           content: SingleChildScrollView(
             child: Form(
               key: _formKey,
@@ -252,9 +131,9 @@ ElevatedButton funcaoCriarProduto(context) {
                 children: [
                   const SizedBox(height: 5, width: 500),
                   TextFormField(
-                    //Input Nome Produto
-                    onSaved: (value) => produto.nome = value,
-                    initialValue: produto.nome,
+                    //Input Nome Curso
+                    onSaved: (value) => curso.nome = value,
+                    initialValue: curso.nome,
                     keyboardType: TextInputType.text,
                     style: const TextStyle(fontSize: 18.0),
                     validator: (value) {
@@ -276,14 +155,14 @@ ElevatedButton funcaoCriarProduto(context) {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    //Input Descrição do Produto
-                    onSaved: (value) => produto.descricao = value,
-                    initialValue: produto.descricao,
+                    //Input Tipo do Curso
+                    onSaved: (value) => curso.tipo = value,
+                    initialValue: curso.tipo,
                     keyboardType: TextInputType.text,
                     style: const TextStyle(fontSize: 18.0),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por favor, entre com uma descrição do Produto.';
+                        return 'Por favor, entre com um tipo de Curso.';
                       }
                       return null;
                     },
@@ -298,58 +177,6 @@ ElevatedButton funcaoCriarProduto(context) {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    //Input Unidade do Produto
-                    onSaved: (value) => produto.unidade = value,
-                    initialValue: produto.unidade,
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(fontSize: 18.0),
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          value.trim().split('').length <= 1) {
-                        return 'Por favor, entre com a Unidade do Produto.';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Unidade",
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 2,
-                          color: Colors.blueGrey,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    //Input Preço do Produto
-                    onSaved: (value) => produto.preco = value,
-                    initialValue: produto.preco,
-                    keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true, signed: false),
-                    style: const TextStyle(fontSize: 18.0),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, entre com o preço do Produto.';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Preço",
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 2,
-                          color: Colors.blueGrey,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
                 ],
               ),
             ),
@@ -363,16 +190,16 @@ ElevatedButton funcaoCriarProduto(context) {
             ),
             ElevatedButton(
               onPressed: () async {
-                //Chama serviço de salvar Produto
+                //Chama serviço de salvar Curso
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  ProdutoService produtoService = ProdutoService();
-                  bool isAdded = await produtoService.adicionarProduto(produto);
+                  CursoService cursoService = CursoService();
+                  bool isAdded = await cursoService.adicionarCurso(curso);
                   if (isAdded) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: Colors.green,
-                        content: const Text("Produto Criado com sucesso!"),
+                        content: const Text("Curso Criado com sucesso!"),
                         action: SnackBarAction(
                           label: "Fechar",
                           onPressed: () => ScaffoldMessenger.of(context)
@@ -406,6 +233,6 @@ ElevatedButton funcaoCriarProduto(context) {
     style: ButtonStyle(
       fixedSize: MaterialStateProperty.all(const Size(200, 40)),
     ),
-    child: const Text("Cadastrar Produto"),
+    child: const Text("Cadastrar Curso"),
   );
 }

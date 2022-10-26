@@ -6,11 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class OfertaEstagio {
   String? idOfertaEstagio;
   Estudante? estudante;
-  String? idEstudante;
   Empresa? empresa;
-  String? idEmpresa;
   Curso? curso;
-  String? idCurso;
   String? periodo;
   String? remuneracao;
   String? endereco;
@@ -30,9 +27,9 @@ class OfertaEstagio {
 
   OfertaEstagio.fromDocument(DocumentSnapshot doc) {
     idOfertaEstagio = doc.id;
-    idEstudante = doc.get('idEstudante');
-    idEmpresa = doc.get('idEmpresa');
-    idCurso = doc.get('idCurso');
+    estudante?.idEstudante = doc.get('idEstudante');
+    empresa?.idEmpresa = doc.get('idEmpresa');
+    curso?.idCurso = doc.get('idCurso');
     periodo = doc.get('periodo');
     remuneracao = doc.get('remuneracao');
     endereco = doc.get('endereco');

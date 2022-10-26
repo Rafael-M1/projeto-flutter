@@ -5,7 +5,6 @@ class Estudante {
   String? idEstudante;
   String? nome;
   String? email;
-  String? idCurso;
   Curso? curso;
   String? previsaoTerminoCurso;
   String? experienciaProfissional;
@@ -24,7 +23,7 @@ class Estudante {
     idEstudante = doc.id;
     nome = doc.get('nome');
     email = doc.get('email');
-    idCurso = doc.get('idCurso');
+    curso?.idCurso = doc.get('idCurso');
     previsaoTerminoCurso = doc.get('previsaoTerminoCurso');
     experienciaProfissional = doc.get('experienciaProfissional');
   }

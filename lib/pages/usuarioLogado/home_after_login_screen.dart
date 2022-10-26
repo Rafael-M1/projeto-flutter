@@ -1,5 +1,4 @@
 import 'package:aplicacao/model/user/user_service.dart';
-import 'package:aplicacao/pages/CrudProdutos/produtos_screen.dart';
 import 'package:aplicacao/pages/home/home.dart';
 import 'package:aplicacao/pages/usuarioLogado/cruds_page.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +15,7 @@ class _HomeScreenState extends State<HomeAfterLoginScreen> {
 
   @override
   void initState() {
-    listPage.add(const SecondPage());
-    listPage.add(const ProdutosScreen());
+    listPage.add(const CrudsPage());
     super.initState();
   }
 

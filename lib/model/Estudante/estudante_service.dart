@@ -31,7 +31,7 @@ class EstudanteService {
     CursoService cursoService = CursoService();
     Estudante estudante = firestoreRef.doc(idEstudante) as Estudante;
     cursoService
-        .getCurso(estudante.idCurso!)
+        .getCurso(estudante.curso!.idCurso!)
         .then((curso) => estudante.curso = curso);
     return estudante;
   }
