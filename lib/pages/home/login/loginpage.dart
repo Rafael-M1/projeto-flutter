@@ -92,9 +92,9 @@ Column formularioLoginUsuario(context, _formKey, userApp) {
               keyboardType: TextInputType.emailAddress,
               style: const TextStyle(fontSize: 18.0),
               validator: (value) {
-                /*if (value == null || value.isEmpty || !value.contains("@")) {
+                if (value == null || value.isEmpty || !value.contains("@")) {
                   return 'Por favor, entre com um e-mail.';
-                }*/
+                }
                 return null;
               },
               decoration: InputDecoration(
@@ -124,9 +124,9 @@ Column formularioLoginUsuario(context, _formKey, userApp) {
               keyboardType: TextInputType.text,
               style: const TextStyle(fontSize: 18.0),
               validator: (value) {
-                /*if (value == null || value.isEmpty) {
+                if (value == null || value.isEmpty) {
                   return 'Por favor, entre com uma senha.';
-                }*/
+                }
                 return null;
               },
               decoration: InputDecoration(
@@ -144,14 +144,14 @@ Column formularioLoginUsuario(context, _formKey, userApp) {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  UserApp usuarioAtalho =
-                      UserApp(email: "rafael@gmail.com", password: "123456");
+                  //UserApp usuarioAtalho =
+                  //    UserApp(email: "rafael@gmail.com", password: "123456");
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     UsuarioServices usuarioServices = UsuarioServices();
                     usuarioServices.signIn(
-                      //userApp,
-                      usuarioAtalho,
+                      userApp,
+                      //usuarioAtalho,
                       onSuccess: () {
                         debugPrint("Serviço logar sucesso");
                         Navigator.of(context).pushAndRemoveUntil(
