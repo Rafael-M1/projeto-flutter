@@ -1,21 +1,42 @@
 import 'package:flutter/material.dart';
 
-class FirstPage extends StatelessWidget {
+class FirstPage extends StatefulWidget {
   const FirstPage({Key? key}) : super(key: key);
+  @override
+  State<FirstPage> createState() => _FirstPageState();
+}
 
+class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text(
-          "Página 1",
-          style: TextStyle(
-            fontSize: 150.0,
-          ),
+    return Center(
+      child: Container(
+        height: 400,
+        width: 1200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromARGB(255, 33, 33, 33),
         ),
-        Text("2"),
-      ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              "Bem-vindo a Estágio.com",
+              style: TextStyle(
+                fontSize: 40.0,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "",
+              //"Encontre seu estágio",
+              style: TextStyle(
+                fontSize: 20.0,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

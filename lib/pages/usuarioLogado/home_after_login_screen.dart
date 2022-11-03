@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeAfterLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 102, 158, 255),
       appBar: AppBar(
         leading: const Icon(Icons.movie_creation),
         title: Padding(

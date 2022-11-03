@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 102, 158, 255),
       appBar: AppBar(
         leading: const Icon(Icons.movie_creation),
         title: Padding(
@@ -55,8 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         _selectedPage = 1;
                       });
                     },
-                    child: const Text("Login"),
+                    child: const Text("Entrar"),
                   ),
+                  const SizedBox(width: 40.0),
                 ],
               ),
             ],

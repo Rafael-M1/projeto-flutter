@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
-import 'package:aplicacao/model/Curso/curso_service.dart';
 import 'package:aplicacao/model/Produto/produto.dart';
 import 'package:aplicacao/model/Produto/produto_service.dart';
+import 'package:aplicacao/pages/CrudEstudantes/estudantes_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:aplicacao/pages/CrudCursos/cursos_screen.dart';
@@ -19,102 +19,102 @@ class _CrudsPageState extends State<CrudsPage> {
   Widget build(BuildContext context) {
     ProdutoService produtoService = ProdutoService();
 
-    return Container(
-      height: 500,
-      color: Colors.black12,
-      child: Column(
-        children: [
-          const SizedBox(height: 50),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  //Navigator.pushNamed(context, '/produtos');
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text("Cadastro de Estudante"),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Voltar'),
-                        ),
-                      ],
-                      content: dialogContentCRUDProduto(
-                        context,
-                        produtoService,
+    return Center(
+      child: Container(
+        height: 400,
+        width: 1200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromARGB(255, 33, 33, 33),
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Cadastro de Estudante"),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Voltar'),
+                          ),
+                        ],
+                        content: const CadastroEstudanteScreen(),
                       ),
-                    ),
-                  );
-                },
-                child: const Text("CRUD Produtos"),
-              ),
-              const SizedBox(width: 50),
-              ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text("Cadastro de Cursos"),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Voltar'),
-                        ),
-                      ],
-                      content: dialogContentCRUDCurso(
-                        context,
+                    );
+                  },
+                  child: const Text("Cadastro de Estudantes"),
+                ),
+                const SizedBox(width: 50),
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Cadastro de Cursos"),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Voltar'),
+                          ),
+                        ],
+                        content: const CadastroCursoScreen(),
                       ),
-                    ),
-                  );
-                },
-                child: const Text("Cadastro de Cursos"),
-              )
-            ],
-          ),
-          const SizedBox(height: 50),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  //Navigator.pushNamed(context, '/produtos');
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text("CRUD Curso"),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Voltar'),
+                    );
+                  },
+                  child: const Text("Cadastro de Cursos"),
+                )
+              ],
+            ),
+            const SizedBox(height: 50),
+            /*Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //Navigator.pushNamed(context, '/produtos');
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("CRUD Curso"),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Voltar'),
+                          ),
+                        ],
+                        content: dialogContentCRUDProduto(
+                          context,
+                          produtoService,
                         ),
-                      ],
-                      content: dialogContentCRUDProduto(
-                        context,
-                        produtoService,
                       ),
-                    ),
-                  );
-                },
-                child: const Text("CRUD Produtos"),
-              ),
-              const SizedBox(width: 50),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/fornecedores');
-                },
-                child: const Text("CRUD Fornecedores"),
-              )
-            ],
-          ),
-        ],
+                    );
+                  },
+                  child: const Text("CRUD Produtos"),
+                ),
+                const SizedBox(width: 50),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/fornecedores');
+                  },
+                  child: const Text("CRUD Fornecedores"),
+                )
+              ],
+            ),*/
+          ],
+        ),
       ),
     );
   }

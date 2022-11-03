@@ -34,4 +34,9 @@ class UserApp {
       'role': role,
     };
   }
+
+  @override
+  String toString() {
+    return "($id - $email - $password)";
+  }
 }

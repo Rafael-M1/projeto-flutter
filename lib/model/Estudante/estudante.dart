@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:aplicacao/model/Curso/curso.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -34,9 +36,36 @@ class Estudante {
       'idEstudante': idEstudante,
       'nome': nome,
       'email': email,
-      'idCurso': curso?.idCurso,
+      'curso': {
+        'idCurso': curso?.idCurso,
+        'nome': curso?.nome,
+        'tipo': curso?.tipo,
+      },
       'previsaoTerminoCurso': previsaoTerminoCurso,
       'experienciaProfissional': experienciaProfissional,
     };
+  }
+
+  Estudante.fromMap(Map<String, dynamic> map) {
+    Curso curso = Curso();
+    this.curso = curso;
+    idEstudante = map['idEstudante'];
+    nome = map['nome'];
+    email = map['email'];
+    previsaoTerminoCurso = map['previsaoTerminoCurso'];
+    experienciaProfissional = map['experienciaProfissional'];
+    curso.idCurso = map['curso']['idCurso'];
+    curso.nome = map['curso']['nome'];
+    curso.tipo = map['curso']['tipo'];
+  }
+
+  @override
+  String toString() {
+    return idEstudante! +
+        nome! +
+        email! +
+        previsaoTerminoCurso! +
+        experienciaProfissional! +
+        curso.toString();
   }
 }

@@ -21,11 +21,10 @@ class _LoginPageState extends State<LoginPage> {
     return Center(
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color.fromARGB(255, 248, 248, 248),
-          ),
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromARGB(255, 33, 33, 33),
         ),
-        //color: Color.fromARGB(255, 173, 173, 173),
+        height: 400,
         width: 1200,
         child: SingleChildScrollView(
           child: Row(
@@ -93,9 +92,9 @@ Column formularioLoginUsuario(context, _formKey, userApp) {
               keyboardType: TextInputType.emailAddress,
               style: const TextStyle(fontSize: 18.0),
               validator: (value) {
-                if (value == null || value.isEmpty || !value.contains("@")) {
+                /*if (value == null || value.isEmpty || !value.contains("@")) {
                   return 'Por favor, entre com um e-mail.';
-                }
+                }*/
                 return null;
               },
               decoration: InputDecoration(
@@ -125,9 +124,9 @@ Column formularioLoginUsuario(context, _formKey, userApp) {
               keyboardType: TextInputType.text,
               style: const TextStyle(fontSize: 18.0),
               validator: (value) {
-                if (value == null || value.isEmpty) {
+                /*if (value == null || value.isEmpty) {
                   return 'Por favor, entre com uma senha.';
-                }
+                }*/
                 return null;
               },
               decoration: InputDecoration(
@@ -145,11 +144,14 @@ Column formularioLoginUsuario(context, _formKey, userApp) {
             Center(
               child: ElevatedButton(
                 onPressed: () {
+                  UserApp usuarioAtalho =
+                      UserApp(email: "rafael@gmail.com", password: "123456");
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     UsuarioServices usuarioServices = UsuarioServices();
                     usuarioServices.signIn(
-                      userApp,
+                      //userApp,
+                      usuarioAtalho,
                       onSuccess: () {
                         debugPrint("Serviço logar sucesso");
                         Navigator.of(context).pushAndRemoveUntil(
@@ -264,7 +266,6 @@ ElevatedButton botaoCadastrarUsuario(context) {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   UsuarioServices usuarioServices = UsuarioServices();
-                  debugPrint(userApp.password);
                   usuarioServices.signUp(
                     userApp,
                     onSuccess: () {

@@ -1,3 +1,4 @@
+import 'package:aplicacao/model/Curso/curso.dart';
 import 'package:aplicacao/model/Curso/curso_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +8,7 @@ import 'estudante.dart';
 class EstudanteService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late CollectionReference firestoreRef;
-  Estudante? estudante;
+  //Estudante? estudante;
 
   EstudanteService() {
     firestoreRef = _firestore.collection('Estudantes');
@@ -15,7 +16,19 @@ class EstudanteService {
 
   Future<bool> adicionarEstudante(Estudante estudante) async {
     try {
-      await firestoreRef.add(estudante.toMap());
+      //print(estudante.toString());
+      CursoService cursoService = CursoService();
+      cursoService
+          .getCurso(estudante.curso!.idCurso.toString())
+          .then((cursoItem) => estudante.curso = cursoItem);
+
+      await firestoreRef.add(estudante.toMap()).then((documentReference) {
+        estudante.idEstudante = documentReference.id;
+        _firestore
+            .collection("Estudantes")
+            .doc(documentReference.id)
+            .set(estudante.toMap());
+      });
       return Future.value(true);
     } on FirebaseException catch (e) {
       if (e.code != 'OK') {

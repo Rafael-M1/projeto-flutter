@@ -12,6 +12,12 @@ class Curso {
     this.tipo,
   });
 
+  Curso.fromMap(Map<String, dynamic> map) {
+    idCurso = map['idCurso'];
+    nome = map['nome'];
+    tipo = map['tipo'];
+  }
+
   Curso.fromDocument(DocumentSnapshot doc) {
     idCurso = doc.id;
     nome = doc.get('nome');
@@ -25,5 +31,10 @@ class Curso {
       'nome': nome,
       'tipo': tipo,
     };
+  }
+
+  @override
+  String toString() {
+    return "($idCurso - $nome - $tipo)";
   }
 }
