@@ -33,8 +33,24 @@ class Curso {
     };
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      "idCurso": idCurso,
+      "nome": nome,
+      "tipo": tipo,
+    };
+  }
+
+  factory Curso.fromJson(dynamic json) {
+    return Curso(
+      idCurso: json['idCurso'],
+      nome: json['nome'],
+      tipo: json['tipo'],
+    );
+  }
+
   @override
   String toString() {
-    return "($idCurso - $nome - $tipo)";
+    return "Curso($idCurso - $nome - $tipo)";
   }
 }

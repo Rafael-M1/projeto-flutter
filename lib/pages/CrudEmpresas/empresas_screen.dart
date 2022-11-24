@@ -2,21 +2,23 @@
 
 import 'package:aplicacao/model/Curso/curso.dart';
 import 'package:aplicacao/model/Curso/curso_service.dart';
+import 'package:aplicacao/model/Empresa/empresa.dart';
+import 'package:aplicacao/model/Empresa/empresa_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class CadastroCursoScreen extends StatefulWidget {
-  const CadastroCursoScreen({super.key});
+class CadastroEmpresaScreen extends StatefulWidget {
+  const CadastroEmpresaScreen({super.key});
 
   @override
-  State<CadastroCursoScreen> createState() => _CadastroCursoScreenState();
+  State<CadastroEmpresaScreen> createState() => _CadastroEmpresaScreenState();
 }
 
-class _CadastroCursoScreenState extends State<CadastroCursoScreen> {
+class _CadastroEmpresaScreenState extends State<CadastroEmpresaScreen> {
   @override
   Widget build(BuildContext context) {
-    CursoService cursoService = CursoService();
-    final Curso curso = Curso();
+    EmpresaService empresaService = EmpresaService();
+    final Empresa empresa = Empresa();
     return SingleChildScrollView(
       child: Center(
         child: Container(
@@ -28,12 +30,12 @@ class _CadastroCursoScreenState extends State<CadastroCursoScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    showDialogCurso(context, curso);
+                    showDialogEmpresa(context, empresa);
                   },
                   style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(const Size(200, 40)),
                   ),
-                  child: const Text("Cadastrar Curso"),
+                  child: const Text("Cadastrar Empresa"),
                 ),
                 const SizedBox(
                   height: 50,
@@ -42,7 +44,7 @@ class _CadastroCursoScreenState extends State<CadastroCursoScreen> {
                   height: MediaQuery.of(context).size.height * 0.8,
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: StreamBuilder(
-                    stream: cursoService.firestoreRef.snapshots(),
+                    stream: empresaService.firestoreRef.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       //Verifica existência de dados
                       if (snapshot.hasData) {
@@ -70,8 +72,8 @@ class _CadastroCursoScreenState extends State<CadastroCursoScreen> {
                                       children: [
                                         Text(
                                             "Nome: " + docSnapshot.get('nome')),
-                                        Text(
-                                            "Tipo: " + docSnapshot.get('tipo')),
+                                        Text("Endereço: " +
+                                            docSnapshot.get('endereco')),
                                       ],
                                     ),
                                     Row(
@@ -80,15 +82,15 @@ class _CadastroCursoScreenState extends State<CadastroCursoScreen> {
                                           iconSize: 25,
                                           tooltip: "Editar",
                                           onPressed: (() {
-                                            Curso curso = Curso();
-                                            curso.idCurso = docSnapshot
-                                                .get('idCurso')
+                                            Empresa empresa = Empresa();
+                                            empresa.idEmpresa = docSnapshot
+                                                .get('idEmpresa')
                                                 .toString();
-                                            curso.nome =
+                                            empresa.nome =
                                                 docSnapshot.get('nome');
-                                            curso.tipo =
-                                                docSnapshot.get('tipo');
-                                            showDialogCurso(context, curso);
+                                            empresa.endereco =
+                                                docSnapshot.get('endereco');
+                                            showDialogEmpresa(context, empresa);
                                           }),
                                           icon: const Icon(Icons.edit),
                                           color: Colors.red,
@@ -134,8 +136,8 @@ class _CadastroCursoScreenState extends State<CadastroCursoScreen> {
                                                           const Text('Excluir'),
                                                       onPressed: () async {
                                                         bool isDeleted =
-                                                            await cursoService
-                                                                .deleteCurso(
+                                                            await empresaService
+                                                                .deleteEmpresa(
                                                                     docSnapshot
                                                                         .id);
                                                         if (isDeleted) {
@@ -144,7 +146,7 @@ class _CadastroCursoScreenState extends State<CadastroCursoScreen> {
                                                               .showSnackBar(
                                                             SnackBar(
                                                               content: const Text(
-                                                                  "Curso excluído com sucesso!"),
+                                                                  "Empresa excluída com sucesso!"),
                                                               action:
                                                                   SnackBarAction(
                                                                 label: "Fechar",
@@ -194,14 +196,14 @@ class _CadastroCursoScreenState extends State<CadastroCursoScreen> {
   }
 }
 
-Future showDialogCurso(context, Curso curso) {
+Future showDialogEmpresa(context, Empresa empresa) {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   return showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: curso.idCurso == null
-          ? const Text('Cadastro de Curso')
-          : const Text('Atualização de Curso'),
+      title: empresa.idEmpresa == null
+          ? const Text('Cadastro de Empresa')
+          : const Text('Atualização de Empresa'),
       content: SingleChildScrollView(
         child: Form(
           key: formKey,
@@ -209,9 +211,9 @@ Future showDialogCurso(context, Curso curso) {
             children: [
               const SizedBox(height: 5, width: 500),
               TextFormField(
-                //Input Nome Curso
-                onSaved: (value) => curso.nome = value,
-                initialValue: curso.nome,
+                //Input Nome Empresa
+                onSaved: (value) => empresa.nome = value,
+                initialValue: empresa.nome,
                 keyboardType: TextInputType.text,
                 style: const TextStyle(fontSize: 18.0),
                 validator: (value) {
@@ -221,7 +223,7 @@ Future showDialogCurso(context, Curso curso) {
                   return null;
                 },
                 decoration: InputDecoration(
-                  hintText: "Nome",
+                  hintText: "Nome da Empresa",
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
                       width: 2,
@@ -232,22 +234,20 @@ Future showDialogCurso(context, Curso curso) {
                 ),
               ),
               const SizedBox(height: 10),
+              //Input Endereço da Oferta de Estágio
               TextFormField(
-                //Input Tipo do Curso
-                onSaved: (value) {
-                  curso.tipo = value;
-                },
-                initialValue: curso.tipo,
+                onSaved: (value) => empresa.endereco = value,
+                initialValue: empresa.endereco,
                 keyboardType: TextInputType.text,
                 style: const TextStyle(fontSize: 18.0),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, entre com um tipo de Curso.';
+                    return 'Por favor, entre com um Endereço.';
                   }
                   return null;
                 },
                 decoration: InputDecoration(
-                  hintText: "Tipo",
+                  hintText: "Endereço",
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
                       width: 2,
@@ -270,17 +270,17 @@ Future showDialogCurso(context, Curso curso) {
         ),
         ElevatedButton(
           onPressed: () async {
-            //Chama serviço de salvar Curso
+            //Chama serviço de salvar Empresa
             if (formKey.currentState!.validate()) {
               formKey.currentState!.save();
-              CursoService cursoService = CursoService();
-              if (curso.idCurso == null) {
-                bool isAdded = await cursoService.adicionarCurso(curso);
+              EmpresaService empresaService = EmpresaService();
+              if (empresa.idEmpresa == null) {
+                bool isAdded = await empresaService.adicionarEmpresa(empresa);
                 if (isAdded) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Colors.green,
-                      content: const Text("Curso Criado com sucesso!"),
+                      content: const Text("Empresa Criada com sucesso!"),
                       action: SnackBarAction(
                         label: "Fechar",
                         onPressed: () =>
@@ -304,15 +304,15 @@ Future showDialogCurso(context, Curso curso) {
                   );
                 }
               } else {
-                bool isUpdated = await cursoService.updateCurso(
-                  curso,
-                  curso.idCurso.toString(),
+                bool isUpdated = await empresaService.updateEmpresa(
+                  empresa,
+                  empresa.idEmpresa.toString(),
                 );
                 if (isUpdated) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Colors.green,
-                      content: const Text("Curso Alterado com sucesso!"),
+                      content: const Text("Empresa Alterada com sucesso!"),
                       action: SnackBarAction(
                         label: "Fechar",
                         onPressed: () =>

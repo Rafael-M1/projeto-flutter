@@ -14,7 +14,10 @@ class EmpresaService {
 
   Future<bool> adicionarEmpresa(Empresa empresa) async {
     try {
-      await firestoreRef.add(empresa.toMap());
+      await firestoreRef.add(empresa.toMap()).then((documentReference) {
+        empresa.idEmpresa = documentReference.id;
+        firestoreRef.doc(documentReference.id).set(empresa.toMap());
+      });
       return Future.value(true);
     } on FirebaseException catch (e) {
       if (e.code != 'OK') {
@@ -27,8 +30,26 @@ class EmpresaService {
   }
 
   Future<Empresa> getEmpresa(String idEmpresa) async {
-    Empresa curso = firestoreRef.doc(idEmpresa) as Empresa;
-    return curso;
+    Empresa empresa = Empresa();
+    await firestoreRef.doc(idEmpresa).get().then(
+      (documentSnapshot) {
+        empresa.idEmpresa = documentSnapshot.get("idEmpresa") as String;
+        empresa.nome = documentSnapshot.get("nome") as String;
+        empresa.endereco = documentSnapshot.get("endereco") as String;
+      },
+    );
+    return empresa;
+  }
+
+  Future<List<Empresa>> getEmpresaList() async {
+    List<Empresa> listaEmpresas = [];
+    await firestoreRef.snapshots().first.then((value) {
+      for (var doc in value.docs) {
+        Empresa empresa = Empresa.fromDocument(doc);
+        listaEmpresas.add(empresa);
+      }
+    });
+    return listaEmpresas;
   }
 
   Future<bool> updateEmpresa(Empresa empresa, String idEmpresa) async {

@@ -35,13 +35,16 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedPage = 0;
-                      });
-                    },
-                    child: const Text("Home"),
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedPage = 0;
+                        });
+                      },
+                      child: const Text("Home"),
+                    ),
                   ),
                   const SizedBox(width: 40.0),
                 ],
@@ -50,13 +53,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   const SizedBox(width: 40.0),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedPage = 1;
-                      });
-                    },
-                    child: const Text("Entrar"),
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedPage = 1;
+                        });
+                      },
+                      child: const Text("Entrar"),
+                    ),
                   ),
                   const SizedBox(width: 40.0),
                 ],

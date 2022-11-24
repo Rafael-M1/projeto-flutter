@@ -1,3 +1,4 @@
+import 'package:aplicacao/model/OfertaEstagio/oferta_estagio_service.dart';
 import 'package:flutter/material.dart';
 
 class FirstPage extends StatefulWidget {
@@ -9,9 +10,10 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
+    OfertaEstagioService ofertaEstagioService = OfertaEstagioService();
     return Center(
       child: Container(
-        height: 400,
+        height: 800,
         width: 1200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -21,7 +23,8 @@ class _FirstPageState extends State<FirstPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Text(
-              "Bem-vindo a Estágio.com",
+              // "Bem-vindo a Estágio.com",
+              "P",
               style: TextStyle(
                 fontSize: 40.0,
               ),
@@ -29,7 +32,7 @@ class _FirstPageState extends State<FirstPage> {
             SizedBox(height: 10),
             Text(
               "",
-              //"Encontre seu estágio",
+              // "Encontre seu estágio",
               style: TextStyle(
                 fontSize: 20.0,
               ),
