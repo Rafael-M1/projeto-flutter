@@ -7,6 +7,8 @@ import 'package:aplicacao/model/Empresa/empresa_service.dart';
 import 'package:aplicacao/model/Estudante/estudante.dart';
 import 'package:aplicacao/model/OfertaEstagio/oferta_estagio.dart';
 import 'package:aplicacao/model/OfertaEstagio/oferta_estagio_service.dart';
+import 'package:aplicacao/model/user/user.dart';
+import 'package:aplicacao/model/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -44,6 +46,7 @@ class _CadastroOfertaEstagioScreenState
 
   @override
   Widget build(BuildContext context) {
+    String idEstudanteSelecionado = "";
     return SingleChildScrollView(
       child: Center(
         child: Container(
@@ -56,10 +59,7 @@ class _CadastroOfertaEstagioScreenState
                 ElevatedButton(
                   onPressed: () {
                     showDialogOfertaEstagio(
-                      context,
-                      listaCursos,
-                      listaEmpresas,
-                    );
+                        context, listaCursos, listaEmpresas, OfertaEstagio());
                   },
                   child: const Text("Cadastrar Oferta de Estágio"),
                 ),
@@ -88,7 +88,7 @@ class _CadastroOfertaEstagioScreenState
                                       Map<String, dynamic> ofertaEstagioMap =
                                           snapshot.data!.docs[index].data()
                                               as Map<String, dynamic>;
-                                      //print(ofertaEstagioMap);
+                                      // print(ofertaEstagioMap);
                                       OfertaEstagio ofertaEstagioItem =
                                           OfertaEstagio.fromMap(
                                               ofertaEstagioMap);
@@ -133,15 +133,43 @@ class _CadastroOfertaEstagioScreenState
                                                 ],
                                               ),
                                               Row(
-                                                children: [
+                                                children: <Widget>[
+                                                  IconButton(
+                                                    iconSize: 25,
+                                                    tooltip: ofertaEstagioItem
+                                                                .listaEstudantesCandidatos !=
+                                                            null
+                                                        ? "Escolher Estudante"
+                                                        : "Não há candidatos",
+                                                    onPressed: (() {
+                                                      if (ofertaEstagioItem
+                                                              .listaEstudantesCandidatos !=
+                                                          null) {
+                                                        showDialogEscolherEstudante(
+                                                            context,
+                                                            ofertaEstagioItem);
+                                                      }
+                                                    }),
+                                                    icon: const Icon(Icons
+                                                        .ads_click_rounded),
+                                                    color: ofertaEstagioItem
+                                                                .listaEstudantesCandidatos !=
+                                                            null
+                                                        ? Colors.red
+                                                        : Colors.grey,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 15,
+                                                  ),
                                                   IconButton(
                                                     iconSize: 25,
                                                     tooltip: "Editar",
                                                     onPressed: (() {
-                                                      // showDialogEstudante(
-                                                      //     context,
-                                                      //     listaCursos,
-                                                      //     estudanteItem);
+                                                      showDialogOfertaEstagio(
+                                                          context,
+                                                          listaCursos,
+                                                          listaEmpresas,
+                                                          ofertaEstagioItem);
                                                     }),
                                                     icon:
                                                         const Icon(Icons.edit),
@@ -268,15 +296,18 @@ Future showDialogOfertaEstagio(
   context,
   List<Curso> listaCursos,
   List<Empresa> listaEmpresas,
+  OfertaEstagio ofertaEstagioCadastro,
 ) {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   return showDialog(
     context: context,
     builder: (context) {
-      OfertaEstagio ofertaEstagio = OfertaEstagio();
-      ofertaEstagio.curso = Curso();
-      ofertaEstagio.empresa = Empresa();
+      OfertaEstagio ofertaEstagio = ofertaEstagioCadastro;
+      if (ofertaEstagio.idOfertaEstagio == null) {
+        ofertaEstagio.curso = Curso();
+        ofertaEstagio.empresa = Empresa();
+      }
       List<DropdownMenuItem<String>> cursoItems = [];
       for (int i = 0; i < listaCursos.length; i++) {
         cursoItems.add(
@@ -403,28 +434,213 @@ Future showDialogOfertaEstagio(
                 _formKey.currentState!.save();
                 OfertaEstagioService ofertaEstagioService =
                     OfertaEstagioService();
-                ofertaEstagio.status = "Não-preenchido";
-                bool isAdded = await ofertaEstagioService
-                    .adicionarOfertaEstagio(ofertaEstagio);
-                if (isAdded) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Colors.green,
-                      content:
-                          const Text("Oferta de Estágio Criada com sucesso!"),
-                      action: SnackBarAction(
-                        label: "Fechar",
-                        onPressed: () =>
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                if (ofertaEstagio.idOfertaEstagio == null) {
+                  ofertaEstagio.status = "Não-preenchido";
+                  bool isAdded = await ofertaEstagioService
+                      .adicionarOfertaEstagio(ofertaEstagio);
+                  if (isAdded) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.green,
+                        content:
+                            const Text("Oferta de Estágio Criada com sucesso!"),
+                        action: SnackBarAction(
+                          label: "Fechar",
+                          onPressed: () => ScaffoldMessenger.of(context)
+                              .hideCurrentSnackBar(),
+                        ),
                       ),
-                    ),
+                    );
+                    _formKey.currentState!.reset();
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: const Text("Problemas ao gravar dados."),
+                        action: SnackBarAction(
+                          label: "Fechar",
+                          onPressed: () => ScaffoldMessenger.of(context)
+                              .hideCurrentSnackBar(),
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  //
+                  bool isUpdated =
+                      await ofertaEstagioService.updateOfertaEstagio(
+                    ofertaEstagio,
+                    ofertaEstagio.idOfertaEstagio.toString(),
                   );
-                  _formKey.currentState!.reset();
-                  Navigator.pop(context);
+                  if (isUpdated) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.green,
+                        content: const Text(
+                            "Oferta de Estágio alterada com sucesso!"),
+                        action: SnackBarAction(
+                          label: "Fechar",
+                          onPressed: () => ScaffoldMessenger.of(context)
+                              .hideCurrentSnackBar(),
+                        ),
+                      ),
+                    );
+                    _formKey.currentState!.reset();
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: const Text("Problemas ao gravar dados."),
+                        action: SnackBarAction(
+                          label: "Fechar",
+                          onPressed: () => ScaffoldMessenger.of(context)
+                              .hideCurrentSnackBar(),
+                        ),
+                      ),
+                    );
+                  }
                 }
               }
             },
             child: const Text('Salvar'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future showDialogEscolherEstudante(
+  context,
+  OfertaEstagio ofertaEstagioCadastro,
+) {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  print(ofertaEstagioCadastro.listaEstudantesCandidatos);
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text(''),
+        content: SingleChildScrollView(
+          child: Container(
+            height: 1000,
+            width: 500,
+            child: Column(
+              children: [
+                // const SizedBox(height: 5, width: 500),
+                const Text("Lista de Candidatos"),
+                Center(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount:
+                        ofertaEstagioCadastro.listaEstudantesCandidatos!.length,
+                    itemBuilder: (context, index) {
+                      UserApp estudanteItem = ofertaEstagioCadastro
+                          .listaEstudantesCandidatos!
+                          .elementAt(index);
+                      return Card(
+                        color: Colors.black26,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      "Nome: " + estudanteItem.nome.toString()),
+                                  Text("Experiência Profissional: " +
+                                      estudanteItem
+                                          .estudante!.experienciaProfissional
+                                          .toString()),
+                                  Text("Previsão de Término do Curso: " +
+                                      estudanteItem
+                                          .estudante!.previsaoTerminoCurso
+                                          .toString()),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    iconSize: 25,
+                                    tooltip: ofertaEstagioCadastro
+                                                .estudanteSelecionado!.id ==
+                                            estudanteItem.id
+                                        ? "Estudante Selecionado"
+                                        : "Selecionar Estudante",
+                                    onPressed: (() {
+                                      OfertaEstagioService
+                                          ofertaEstagioService =
+                                          OfertaEstagioService();
+                                      ofertaEstagioCadastro
+                                          .estudanteSelecionado = estudanteItem;
+                                      ofertaEstagioCadastro.status =
+                                          "Preenchido"; //idEstudanteSelecionado
+
+                                      ofertaEstagioService.updateOfertaEstagio(
+                                          ofertaEstagioCadastro,
+                                          ofertaEstagioCadastro.idOfertaEstagio
+                                              .toString());
+                                      estudanteItem.estudante!.isEstagiando =
+                                          "sim";
+                                      UsuarioServices usuarioServices =
+                                          UsuarioServices();
+                                      usuarioServices.updateUsuario(
+                                          estudanteItem,
+                                          estudanteItem.id.toString());
+
+                                      if (ofertaEstagioCadastro
+                                              .listaEstudantesCandidatos !=
+                                          null) {
+                                        for (var element
+                                            in ofertaEstagioCadastro
+                                                .listaEstudantesCandidatos!
+                                                .toList()) {
+                                          if (element.id != estudanteItem.id) {
+                                            element.estudante!.isEstagiando =
+                                                "nao";
+                                            usuarioServices.updateUsuario(
+                                                element, element.id.toString());
+                                          }
+                                        }
+                                      }
+                                    }),
+                                    icon: const Icon(Icons.edit),
+                                    color: ofertaEstagioCadastro
+                                                .estudanteSelecionado!.id ==
+                                            estudanteItem.id
+                                        ? Colors.yellow
+                                        : Colors.red,
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Voltar'),
           ),
         ],
       );

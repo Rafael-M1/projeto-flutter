@@ -26,9 +26,12 @@ class _HomeScreenState extends State<HomeAfterLoginScreen> {
   @override
   void initState() {
     asyncMethod().then((usuarioLogado) {
-      listPage.add(BemVindoScreen(
+      listPage.add(
+        BemVindoScreen(
           emailParam: usuarioLogado.email.toString(),
-          usuarioLogadoParam: usuarioLogado));
+          usuarioLogadoParam: usuarioLogado,
+        ),
+      );
       setState(() {
         _selectedPage = 0;
       });

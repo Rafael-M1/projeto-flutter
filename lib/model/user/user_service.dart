@@ -47,6 +47,7 @@ class UsuarioServices {
           .user;
       userApp.id = user!.uid;
       userApp.role = "n";
+      userApp.estudante?.isEstagiando = 'nao';
       addUsuario(userApp, user.uid);
       onSuccess!();
     } catch (e) {

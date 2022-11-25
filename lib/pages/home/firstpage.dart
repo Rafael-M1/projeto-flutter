@@ -23,16 +23,16 @@ class _FirstPageState extends State<FirstPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Text(
-              // "Bem-vindo a Estágio.com",
-              "P",
+              "Bem-vindo a Estágio.com",
+              // "P",
               style: TextStyle(
                 fontSize: 40.0,
               ),
             ),
             SizedBox(height: 10),
             Text(
-              "",
-              // "Encontre seu estágio",
+              // "",
+              "Encontre seu estágio",
               style: TextStyle(
                 fontSize: 20.0,
               ),

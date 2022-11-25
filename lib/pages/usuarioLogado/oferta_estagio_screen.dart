@@ -95,7 +95,7 @@ class _OfertaEstagioScreenState extends State<OfertaEstagioScreen> {
                                         padding: const EdgeInsets.all(5.0),
                                         child: Column(children: [
                                           const Text(
-                                            "Oferta de " /*Estágio"*/,
+                                            "Oferta de Estágio",
                                             style: TextStyle(fontSize: 20),
                                           ),
                                           const SizedBox(height: 20),

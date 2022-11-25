@@ -122,29 +122,30 @@ class OfertaEstagio {
     curso!.nome = map['curso']['nome'];
     curso!.tipo = map['curso']['tipo'];
 
-    //ListaEstudantesCandidatos
-    var aux = jsonDecode(map['listaEstudantesCandidatos'].toString()) as List;
-
-    List<UserApp> listaEstudantes =
-        aux.map((listaItem) => UserApp.fromJson(listaItem)).toList();
-    //print(listaEstudantes);
-    listaEstudantesCandidatos = listaEstudantes;
+    if (jsonDecode(map['listaEstudantesCandidatos'].toString()).runtimeType !=
+        Null) {
+      var aux = jsonDecode(map['listaEstudantesCandidatos'].toString()) as List;
+      List<UserApp> listaEstudantes =
+          aux.map((listaItem) => UserApp.fromJson(listaItem)).toList();
+      // print(listaEstudantes);
+      listaEstudantesCandidatos = listaEstudantes;
+    }
   }
 
-  @override
-  String toString() {
-    return "OfertaEstagio(" +
-        idOfertaEstagio! +
-        " - " +
-        periodo! +
-        " - " +
-        remuneracao! +
-        " - " +
-        status! +
-        " - " +
-        empresa.toString() +
-        " - " +
-        curso.toString() +
-        ")";
-  }
+  // @override
+  // String toString() {
+  //   return "OfertaEstagio(" +
+  //       idOfertaEstagio! +
+  //       " - " +
+  //       periodo! +
+  //       " - " +
+  //       remuneracao! +
+  //       " - " +
+  //       status! +
+  //       " - " +
+  //       empresa.toString() +
+  //       " - " +
+  //       curso.toString() +
+  //       ")";
+  // }
 }
